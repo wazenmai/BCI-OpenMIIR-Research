@@ -1,0 +1,5 @@
+numpy
+matplotlib
+openpyxl
+mne==1.3.1
+mne_icalabel
