@@ -24,6 +24,28 @@ pip3 install -e .
 ```
 In asrpy.asrpy, change `np.int` to `np.int64`.
 
+### Generate Artifact Removed Data
+```
+python3 remove_artifact.py
+```
+
+### Training
+**Argument**
+- cond: select condition from 1 to 5
+- all: exclude P05 subject or not. Since P05 coughed while recording, so the data contain more noise.
+- psd: use frequency-domain features or not, only work on cnn model.
+
+**Method**
+- logistic regression: `logistic_regression.py`
+- k-nearest neighbor: `knn.py`
+- support vector machine: `svm.py`
+- convolutional neural network: `cnn.py`
+
+```
+python3 cnn.py --cond 1 --all --psd
+```
+
+
 ## Data Description
 The OpenMIIR dataset comprises Electroencephalography (EEG) recordings taken during music perception and imagination. These data were collected from 10 subjects who listened to and imagined 12 short music fragments—each 7–16 s long—taken from well-known pieces. There are 3 groups with 4 stimuli each.
 
@@ -115,6 +137,13 @@ There are total 10 subjects in this dataset, so I analyze the data quality of ea
 ## Validation & Results
 
 ## Future Works
+The overall performance is not perfect may due to three reasons. 
+
+First, the feature is poor. One can consider to use similarity-constraint encoding to generate faetures. A relative similarity constraint (a,b,c) describes a relative comparison of the trials a, b, and c in the form “a is more similar to b than a is to c.” We can use this constraint to train the encoder to generate strong and useful features to the model for specific tasks.
+
+Second, the model architecture is poor. Besides CNN, other three methods are all basic machine learning method and do not contain many hyperparameter tuning. On the other hand, CNN needs a lot of heuristics to design a good model. One can try other combination of convolutional layer and pooling layer to get better results.
+
+Last but not least, the dataset itself does not contain enough information to perform such stimulus classification tasks. Since every subject only listens to one stimulus in one condition for only 5 times, sum to 60 records in total. The number is far from the data amount one need to train powerful machine learning model nowadays. Wish more people participate in this kind of research and add more data, the situation may be reversed in the future.
 
 
 ## Reference
