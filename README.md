@@ -1,6 +1,8 @@
 # BCI Final - Analyze EEG Taken During Music Perception and Imagination
 111062610 陳奕君
 
+Video Link: https://drive.google.com/file/d/1NPv78XXjqOQE0dJAWMUh0mDouMjjMHAf/view?usp=sharing
+
 ## Overview
 This project aims to investigate the OpenMIIR dataset in order to find useful information within EEG data and music stimulus and let more people know this field of research. 
 
