@@ -1,5 +1,7 @@
 asrpy/
 bci_env/
+test_env/
 log
 openmiir/
 .ipynb_checkpoints/
+__pycache__/

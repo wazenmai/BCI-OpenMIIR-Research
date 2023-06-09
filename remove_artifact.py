@@ -5,7 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from asrpy.asrpy import ASR
-from mne_icalabel import label_components
+# from mne_icalabel import label_components
 
 dir_path = "./openmiir/eeg/mne/"
 DEFAULT_VERSION = 1
@@ -354,7 +354,7 @@ def read_data(dir_path, filepath, filter=False, reconstructed=False):
     trial_event_times = raw.times[trial_events[:,0]]
     return raw, trial_events
 
-def generate_data_and_label(raw, trial_events, condition, epoch=False):
+def generate_data_and_label(raw, trial_events, condition, psd=False, epoch=False):
     """
     Parameter
     - raw
@@ -388,17 +388,23 @@ def generate_data_and_label(raw, trial_events, condition, epoch=False):
                           tmin, tmax, preload=True,
                           proj=False, picks=picks, verbose=False)
         data_epochs.append(listen_with_cue_epochs)
-        listen_with_cue_epochs = listen_with_cue_epochs.get_data()
+        listen_data = listen_with_cue_epochs.get_data()
+        if psd:
+            frequency = listen_with_cue_epochs.compute_psd()
+            listen_data = np.concatenate((listen_data, frequency), axis=2)
         imagine_with_cue_epochs = mne.Epochs(raw, trial_events, [id*10 + 2 for id in STIMULUS_IDS],
                           tmin, tmax, preload=True,
                           proj=False, picks=picks, verbose=False)
         data_epochs.append(imagine_with_cue_epochs)
-        imagine_with_cue_epochs = imagine_with_cue_epochs.get_data()
-        listen_epoch_labels = [0] * listen_with_cue_epochs.shape[0]
-        imagine_epoch_labels = [1] * imagine_with_cue_epochs.shape[0]
+        imagine_data = imagine_with_cue_epochs.get_data()
+        if psd:
+            frequency = imagine_with_cue_epochs.compute_psd()
+            imagine_data = np.concatenate((imagine_data, frequency), axis=2)
+        listen_epoch_labels = [0] * listen_data.shape[0]
+        imagine_epoch_labels = [1] * imagine_data.shape[0]
 
         # concat data and label
-        data_list = np.concatenate((listen_with_cue_epochs, imagine_with_cue_epochs), axis=0)
+        data_list = np.concatenate((listen_data, imagine_data), axis=0)
         label_list = listen_epoch_labels + imagine_epoch_labels
 
         # make group
@@ -423,7 +429,10 @@ def generate_data_and_label(raw, trial_events, condition, epoch=False):
                         tmin, tmax, preload=True,
                         proj=False, picks=picks, verbose=False)
         data_epochs.append(fast_epochs)
-        fast_epochs = fast_epochs.get_data()
+        fast_data = fast_epochs.get_data()
+        if psd:
+            frequency = fast_epochs.compute_psd()
+            fast_data = np.concatenate((fast_data, frequency), axis=2)
         slow_id = [4, 14, 21, 22, 23, 24]
         slow_event_id = []
         for stimulus in slow_id:
@@ -433,13 +442,16 @@ def generate_data_and_label(raw, trial_events, condition, epoch=False):
                         tmin, tmax, preload=True,
                         proj=False, picks=picks, verbose=False)
         data_epochs.append(slow_epochs)
-        slow_epochs = slow_epochs.get_data()
+        slow_data = slow_epochs.get_data()
+        if psd:
+            frequency = slow_epochs.compute_psd()
+            slow_data = np.concatenate((fast_data, frequency), axis=2)
         
         fast_epoch_labels = [0] * fast_epochs.shape[0]
         slow_epoch_labels = [1] * slow_epochs.shape[0]
 
         # concat data and label
-        data_list = np.concatenate((fast_epochs, slow_epochs), axis=0)
+        data_list = np.concatenate((fast_data, slow_data), axis=0)
         label_list = fast_epoch_labels + slow_epoch_labels
 
         # make group
@@ -466,7 +478,11 @@ def generate_data_and_label(raw, trial_events, condition, epoch=False):
                             tmin, tmax, preload=True,
                             proj=False, picks=picks, verbose=False)
             data_epochs.append(epochs)
-            data_list.append(epochs.get_data())
+            data = epochs.get_data()
+            if psd:
+                frequency = epochs.compute_psd()
+                data = np.concatenate((data, frequency), axis=2)
+            data_list.append(data)
         labels = []
         for i, stimulus in enumerate(STIMULUS_IDS):
             if condition == 3:

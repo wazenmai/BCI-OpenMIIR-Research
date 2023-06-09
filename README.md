@@ -45,17 +45,72 @@ The presentation was divided into 5 blocks that each comprised all 12 stimuli in
 EEG was recorded from 10 participants (3 male), aged 19–36, with normal hearing and no history of brain injury. A BioSemi Active-Two system was used with 64 + 2 EEG channels sampled at 512Hz.
 
 ### Data Quality
- Outer pipes  Cell padding 
-No sorting
-| Pre-processing                  |                 |     | Average numbers of ICs classified by ICLabel |        |     |       |            |               |       |           |
-| ------------------------------- | --------------- | --- | -------------------------------------------- | ------ | --- | ----- | ---------- | ------------- | ----- | --------- |
-| EEG (P01 dataset - 64 channels) | bandpass-filter | ASR | Brain                                        | Muscle | Eye | Heart | Line Noise | Channel Noise | Other | Total ICs |
-| raw                             |                 |     | 0                                            | 0      | 0   | 0     | 0          | 0             | 8     | 8         |
-| filtered                        | ✅               |     | 15                                           | 0      | 2   | 0     | 1          | 3             | 16    | 37        |
-| ASR-correlated                  | ✅               | ✅   | 17                                           | 0      | 2   | 0     | 0          | 3             | 28    | 50        |
+Due to time-consuming and high memory usage of ASR, here I only use 5 minutes of data, where tmin=10, tmax=310 (second).
+There are total 10 subjects in this dataset, so I analyze the data quality of each subject. [Excel Table Link](https://docs.google.com/spreadsheets/d/1OFa4vArgFSqsREpNwL7D5V0bS7movyJwkqo6joUwPWw/edit?usp=sharing)
+
+| EEG (P01 dataset - 64 channels) | bandpass-filter | ASR | Brain | Muscle | Eye | Heart | Line Noise | Channel Noise | Other | Total ICs |
+| ------------------------------- | --------------- | --- | ----- | ------ | --- | ----- | ---------- | ------------- | ----- | --------- |
+| raw                             |                 |     | 0     | 0      | 0   | 0     | 0          | 0             | 8     | 8         |
+| filtered                        | ✅               |     | 15    | 0      | 2   | 0     | 1          | 3             | 16    | 37        |
+| ASR-correlated                  | ✅               | ✅   | 17    | 0      | 2   | 0     | 0          | 3             | 28    | 50        |
+
+| EEG (P04 dataset - 64 channels) | bandpass-filter | ASR | Brain | Muscle | Eye | Heart | Line Noise | Channel Noise | Other | Total ICs |
+| ------------------------------- | --------------- | --- | ----- | ------ | --- | ----- | ---------- | ------------- | ----- | --------- |
+| raw                             |                 |     | 0     | 0      | 0   | 0     | 0          | 0             | 6     | 6         |
+| filtered                        | ✅               |     | 19    | 0      | 2   | 0     | 0          | 6             | 13    | 40        |
+| ASR-correlated                  | ✅               | ✅   | 17    | 0      | 2   | 0     | 0          | 7             | 27    | 53        |
+
+| EEG (P05 dataset - 64 channels) | bandpass-filter | ASR | Brain | Muscle | Eye | Heart | Line Noise | Channel Noise | Other | Total ICs |
+| ------------------------------- | --------------- | --- | ----- | ------ | --- | ----- | ---------- | ------------- | ----- | --------- |
+| raw                             |                 |     | 0     | 0      | 0   | 0     | 0          | 0             | 7     | 7         |
+| filtered                        | ✅               |     | 5     | 0      | 4   | 0     | 0          | 21            | 16    | 46        |
+| ASR-correlated                  | ✅               | ✅   | 26    | 3      | 1   | 0     | 0          | 13            | 13    | 56        |
+
+| EEG (P06 dataset - 64 channels) | bandpass-filter | ASR | Brain | Muscle | Eye | Heart | Line Noise | Channel Noise | Other | Total ICs |
+| ------------------------------- | --------------- | --- | ----- | ------ | --- | ----- | ---------- | ------------- | ----- | --------- |
+| raw                             |                 |     | 0     | 0      | 0   | 0     | 0          | 0             | 5     | 5         |
+| filtered                        | ✅               |     | 20    | 0      | 4   | 0     | 0          | 0             | 7     | 31        |
+| ASR-correlated                  | ✅               | ✅   | 20    | 0      | 4   | 0     | 0          | 0             | 14    | 38        |
+
+| EEG (P07 dataset - 64 channels) | bandpass-filter | ASR | Brain | Muscle | Eye | Heart | Line Noise | Channel Noise | Other | Total ICs |
+| ------------------------------- | --------------- | --- | ----- | ------ | --- | ----- | ---------- | ------------- | ----- | --------- |
+| raw                             |                 |     | 0     | 0      | 0   | 0     | 0          | 0             | 8     | 8         |
+| filtered                        | ✅               |     | 13    | 2      | 2   | 0     | 0          | 0             | 10    | 27        |
+| ASR-correlated                  | ✅               | ✅   | 20    | 2      | 2   | 0     | 0          | 0             | 19    | 43        |
+
+| EEG (P09 dataset - 64 channels) | bandpass-filter | ASR | Brain | Muscle | Eye | Heart | Line Noise | Channel Noise | Other | Total ICs |
+| ------------------------------- | --------------- | --- | ----- | ------ | --- | ----- | ---------- | ------------- | ----- | --------- |
+| raw                             |                 |     | 0     | 0      | 0   | 0     | 0          | 0             | 3     | 3         |
+| filtered                        | ✅               |     | 9     | 0      | 4   | 0     | 0          | 0             | 3     | 16        |
+| ASR-correlated                  | ✅               | ✅   | 20    | 5      | 2   | 0     | 0          | 0             | 6     | 33        |
+
+| EEG (P11 dataset - 64 channels) | bandpass-filter | ASR | Brain | Muscle | Eye | Heart | Line Noise | Channel Noise | Other | Total ICs |
+| ------------------------------- | --------------- | --- | ----- | ------ | --- | ----- | ---------- | ------------- | ----- | --------- |
+| raw                             |                 |     | 0     | 0      | 0   | 0     | 0          | 0             | 5     | 5         |
+| filtered                        | ✅               |     | 16    | 2      | 1   | 0     | 0          | 1             | 6     | 26        |
+| ASR-correlated                  | ✅               | ✅   | 20    | 2      | 1   | 0     | 0          | 1             | 8     | 32        |
+
+| EEG (P12 dataset - 64 channels) | bandpass-filter | ASR | Brain | Muscle | Eye | Heart | Line Noise | Channel Noise | Other | Total ICs |
+| ------------------------------- | --------------- | --- | ----- | ------ | --- | ----- | ---------- | ------------- | ----- | --------- |
+| raw                             |                 |     | 0     | 0      | 0   | 0     | 0          | 0             | 5     | 5         |
+| filtered                        | ✅               |     | 12    | 2      | 2   | 0     | 0          | 1             | 6     | 23        |
+| ASR-correlated                  | ✅               | ✅   | 19    | 2      | 3   | 1     |            | 1             | 15    | 41        |
+
+| EEG (P13 dataset - 64 channels) | bandpass-filter | ASR | Brain | Muscle | Eye | Heart | Line Noise | Channel Noise | Other | Total ICs |
+| ------------------------------- | --------------- | --- | ----- | ------ | --- | ----- | ---------- | ------------- | ----- | --------- |
+| raw                             |                 |     | 0     | 0      | 0   | 0     | 0          | 0             | 6     | 6         |
+| filtered                        | ✅               |     | 21    | 0      | 2   | 0     | 0          | 3             | 3     | 29        |
+| ASR-correlated                  | ✅               | ✅   | 21    | 0      | 2   | 0     | 0          | 5             | 8     | 36        |
+
+| EEG (P14 dataset - 64 channels) | bandpass-filter | ASR | Brain | Muscle | Eye | Heart | Line Noise | Channel Noise | Other | Total ICs |
+| ------------------------------- | --------------- | --- | ----- | ------ | --- | ----- | ---------- | ------------- | ----- | --------- |
+| raw                             |                 |     | 0     | 0      | 0   | 0     | 0          | 0             | 5     | 5         |
+| filtered                        | ✅               |     | 13    | 1      | 3   | 0     | 0          | 1             | 7     | 25        |
+| ASR-correlated                  | ✅               | ✅   | 18    | 3      | 2   | 0     | 0          | 2             | 7     | 32        |
 
 
 ## Model Framework
+![image](framework.png)
 
 ## Validation & Results
 

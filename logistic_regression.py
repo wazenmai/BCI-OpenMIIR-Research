@@ -60,7 +60,10 @@ if __name__ == '__main__':
     labels = label_array  # Replace ... with your label array
 
     # Split data into train and test sets
-    X_train, X_test, y_train, y_test = train_test_split(features, labels, test_size=0.2, random_state=42)
+    if args.cond == 1 or args.cond == 2:
+        X_train, X_test, y_train, y_test = train_test_split(features, labels, test_size=0.2, random_state=42)
+    else:
+        X_train, X_test, y_train, y_test = train_test_split(features, labels, test_size=0.2, stratify=labels, random_state=42)
 
     # Create a group array for GroupKFold using label distribution
     group_labels, group_counts = np.unique(y_train, return_counts=True)
