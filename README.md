@@ -200,7 +200,7 @@ There are total 10 subjects in this dataset, so I analyze the data quality of ea
 | CNN | Time + Frequency | Include P05 | 0.087 | x | 0.087 |
 |  | Time + Frequency | Exclude P05 | 0.087 | x | 0.087 |
 
-## Future Works
+## Conclusion and Future Works
 The overall performance is not perfect may due to three reasons. 
 
 First, the feature is poor. One can consider to use similarity-constraint encoding to generate faetures. A relative similarity constraint (a,b,c) describes a relative comparison of the trials a, b, and c in the form “a is more similar to b than a is to c.” We can use this constraint to train the encoder to generate strong and useful features to the model for specific tasks.
