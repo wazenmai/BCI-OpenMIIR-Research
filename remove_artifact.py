@@ -3,11 +3,13 @@ import mne
 import openpyxl
 import numpy as np
 import matplotlib.pyplot as plt
+from sklearn.preprocessing import OneHotEncoder
+from tensorflow.keras.utils import to_categorical
 
-from asrpy.asrpy import ASR
+# from asrpy.asrpy import ASR
 # from mne_icalabel import label_components
 
-dir_path = "./openmiir/eeg/mne/"
+dir_path = "../openmiir/eeg/mne/"
 DEFAULT_VERSION = 1
 CONDITIONS = ['cued', 'non-cued', 'free']
 STIMULUS_IDS = [1, 2, 3, 4, 11, 12, 13, 14, 21, 22, 23, 24]
@@ -185,9 +187,9 @@ def decode_event_id(event_id):
         return event_id
     
 def generate_beat_events(raw, trial_events):
-    meta = load_stimuli_metadata(data_root="./openmiir")
-    beats = load_stimuli_metadata_map(data_root="./openmiir", key='beats')
-    cue_beats = load_stimuli_metadata_map(data_root="./openmiir", key='cue_beats')
+    meta = load_stimuli_metadata(data_root="../openmiir")
+    beats = load_stimuli_metadata_map(data_root="../openmiir", key='beats')
+    cue_beats = load_stimuli_metadata_map(data_root="../openmiir", key='cue_beats')
 
     ## determine the number of cue beats
     num_cue_beats = dict()
@@ -354,17 +356,17 @@ def read_data(dir_path, filepath, filter=False, reconstructed=False):
     trial_event_times = raw.times[trial_events[:,0]]
     return raw, trial_events
 
-def generate_data_and_label(raw, trial_events, condition, psd=False, epoch=False):
+def generate_data_and_label(raw, trial_events, condition, psd=False, down=False, down_sfreq=64, epoch=False):
     """
     Parameter
     - raw
     - events (trial events)
     - condition
       1. Perception vs. Imagination
-      2. Pop song vs. Instrument music (perception, without lyrics)
-      3. Lyrics vs. No Lyrics vs. Instrument
-      4. Cued vs. Not Cued
-      5. Stimulus classification
+      2. Fast vs. Slow Tempo
+      3. Stimulus Classification (all)
+      4. Stimulus Classification (perception)
+      5. Stimulus Classification (imagination)
     Return
     - data array, label array, group array (for CV)
     """
@@ -387,6 +389,8 @@ def generate_data_and_label(raw, trial_events, condition, psd=False, epoch=False
         listen_with_cue_epochs = mne.Epochs(raw, trial_events, [id*10 + 1 for id in STIMULUS_IDS],
                           tmin, tmax, preload=True,
                           proj=False, picks=picks, verbose=False)
+        if down:
+            listen_with_cue_epochs = listen_with_cue_epochs.resample(down_sfreq)
         data_epochs.append(listen_with_cue_epochs)
         listen_data = listen_with_cue_epochs.get_data()
         if psd:
@@ -395,6 +399,8 @@ def generate_data_and_label(raw, trial_events, condition, psd=False, epoch=False
         imagine_with_cue_epochs = mne.Epochs(raw, trial_events, [id*10 + 2 for id in STIMULUS_IDS],
                           tmin, tmax, preload=True,
                           proj=False, picks=picks, verbose=False)
+        if down:
+            imagine_with_cue_epochs = imagine_with_cue_epochs.resample(down_sfreq)
         data_epochs.append(imagine_with_cue_epochs)
         imagine_data = imagine_with_cue_epochs.get_data()
         if psd:
@@ -428,6 +434,8 @@ def generate_data_and_label(raw, trial_events, condition, psd=False, epoch=False
         fast_epochs = mne.Epochs(raw, trial_events, fast_event_id,
                         tmin, tmax, preload=True,
                         proj=False, picks=picks, verbose=False)
+        if down:
+            fast_epochs = fast_epochs.resample(down_sfreq)
         data_epochs.append(fast_epochs)
         fast_data = fast_epochs.get_data()
         if psd:
@@ -441,14 +449,16 @@ def generate_data_and_label(raw, trial_events, condition, psd=False, epoch=False
         slow_epochs = mne.Epochs(raw, trial_events, slow_event_id,
                         tmin, tmax, preload=True,
                         proj=False, picks=picks, verbose=False)
+        if down:
+            slow_epochs = slow_epochs.resample(down_sfreq)
         data_epochs.append(slow_epochs)
         slow_data = slow_epochs.get_data()
         if psd:
             frequency = slow_epochs.compute_psd()
-            slow_data = np.concatenate((fast_data, frequency), axis=2)
+            slow_data = np.concatenate((slow_data, frequency), axis=2)
         
-        fast_epoch_labels = [0] * fast_epochs.shape[0]
-        slow_epoch_labels = [1] * slow_epochs.shape[0]
+        fast_epoch_labels = [0] * fast_data.shape[0]
+        slow_epoch_labels = [1] * slow_data.shape[0]
 
         # concat data and label
         data_list = np.concatenate((fast_data, slow_data), axis=0)
@@ -477,6 +487,8 @@ def generate_data_and_label(raw, trial_events, condition, psd=False, epoch=False
             epochs = mne.Epochs(raw, trial_events, event_ids,
                             tmin, tmax, preload=True,
                             proj=False, picks=picks, verbose=False)
+            if down:
+                epochs = epochs.resample(down_sfreq)
             data_epochs.append(epochs)
             data = epochs.get_data()
             if psd:
@@ -500,6 +512,7 @@ def generate_data_and_label(raw, trial_events, condition, psd=False, epoch=False
         group_array = np.hstack(group_list)
         data_array = data
         label_array = np.array(labels)
+        label_array = to_categorical(label_array)
 
 
     print("data: {}, label: {}, group: {}".format(data_array.shape, label_array.shape, group_array.shape))
