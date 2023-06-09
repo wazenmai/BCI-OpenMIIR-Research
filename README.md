@@ -53,7 +53,7 @@ The OpenMIIR dataset comprises Electroencephalography (EEG) recordings taken dur
 2. Stimuli 11–14 are from different recordings of the same songs as stimuli 1–4. These recordings do not contain a singing voice. Instead, the melody is played by one or more instruments.
 3. Stimuli 21–24 are from recordings of purely instrumental pieces that do not have any lyrics and thus it is not possible to sing along.
 
-![image](stimulus.png)
+![image](./images/stimulus.png)
 
 All stimuli were normalized in volume and kept as similar in length as possible with care taken to ensure that they all contained complete musical phrases starting from the beginning of the piece. The pairs of recordings for the same song with and without lyrics were tempo-matched. The stimuli were presented to the participants in several conditions while EEG was recorded.
 
@@ -132,9 +132,73 @@ There are total 10 subjects in this dataset, so I analyze the data quality of ea
 
 
 ## Model Framework
-![image](framework.png)
+![image](./images/framework.png)
 
 ## Validation & Results
+### Table 1 -  Perception vs. Imagination
+
+| Method | Feature generation | Dataset | Train acc | Valid acc | Test acc |
+| --- | --- | --- | --- | --- | --- |
+| LogisticRegression | Statistic | Include P05 | 0.727 | x | 0.538 |
+|  | Statistic | Exclude P05 | 0.754 | x | 0.546 |
+| SVM | Statistic | Include P05 | 0.714 | x | 0.542 |
+|  | Statistic | Exclude P05 | 0.708 | x | 0.537 |
+| KNN | Statistic | Include P05 | 0.709 | 0.546 | 0.5125 |
+|  | Statistic | Exclude P05 | 0.713 | 0.545 | 0.546 |
+| CNN | Time + Frequency | Include P05 | 0.5 | x | 0.5 |
+|  | Time + Frequency | Exclude P05 | 0.5 | x | 0.5 |
+
+### Table 2 - Fast tempo vs. Slow tempo
+
+| Method | Feature generation | Dataset | Train acc | Valid acc | Test acc |
+| --- | --- | --- | --- | --- | --- |
+| LogisticRegression | Statistic | Include P05 | 0.6927 | x | 0.45 |
+|  | Statistic | Exclude P05 | 0.7188 | x | 0.4120 |
+| SVM | Statistic | Include P05 | 0.695 | x | 0.508 |
+|  | Statistic | Exclude P05 | 0.715 | x | 0.444 |
+| KNN | Statistic | Include P05 | 0.715 | 0.499 | 0.471 |
+|  | Statistic | Exclude P05 | 0.743 | 0.495 | 0.509 |
+| CNN | Time + Frequency | Include P05 | 0.5 | x | 0.5 |
+|  | Time + Frequency | Exclude P05 | 0.5 | x | 0.5 |
+
+### Table 3 - Song identification (12 category, all)
+
+| Method | Feature generation | Dataset | Train acc | Valid acc | Test acc |
+| --- | --- | --- | --- | --- | --- |
+| LogisticRegression | Statistic | Include P05 | 0.562 | x | 0.121 |
+|  | Statistic | Exclude P05 | 0.723 | x | 0.097 |
+| SVM | Statistic | Include P05 | 0.392 | x | 0.092 |
+|  | Statistic | Exclude P05 | 0.395 | x | 0.079 |
+| KNN | Statistic | Include P05 | 0.354 | 0.069 | 0.067 |
+|  | Statistic | Exclude P05 | 0.313 | 0.068 | 0.079 |
+| CNN | Time + Frequency | Include P05 | 0.5 | x | 0.5 |
+|  | Time + Frequency | Exclude P05 | 0.5 | x | 0.5 |
+
+### Table 4 - Song identification (12 category, perception)
+
+| Method | Feature generation | Dataset | Train acc | Valid acc | Test acc |
+| --- | --- | --- | --- | --- | --- |
+| LogisticRegression | Statistic | Include P05 | 0.973 | x | 0.142 |
+|  | Statistic | Exclude P05 | 1.0 | x | 0.065 |
+| SVM | Statistic | Include P05 | 0.433 | x | 0.075 |
+|  | Statistic | Exclude P05 | 0.391 | x | 0.102 |
+| KNN | Statistic | Include P05 | 0.360 | 0.103 | 0.108 |
+|  | Statistic | Exclude P05 | 0.301 | 0.104 | 0.102 |
+| CNN | Time + Frequency | Include P05 | 0.087 | x | 0.087 |
+|  | Time + Frequency | Exclude P05 | 0.087 | x | 0.087 |
+
+### Table 5 - Song identification (12 category, imagination)
+
+| Method | Feature generation | Dataset | Train acc | Valid acc | Test acc |
+| --- | --- | --- | --- | --- | --- |
+| LogisticRegression | Statistic | Include P05 | 1.0 | x | 0.092 |
+|  | Statistic | Exclude P05 | 0.991 | x | 0.074 |
+| SVM | Statistic | Include P05 | 0.285 | x | 0.042 |
+|  | Statistic | Exclude P05 | 0.259 | x | 0.065 |
+| KNN | Statistic | Include P05 | 0.335 | 0.09 | 0.083 |
+|  | Statistic | Exclude P05 | 0.343 | 0.083 | 0.083 |
+| CNN | Time + Frequency | Include P05 | 0.087 | x | 0.087 |
+|  | Time + Frequency | Exclude P05 | 0.087 | x | 0.087 |
 
 ## Future Works
 The overall performance is not perfect may due to three reasons. 
