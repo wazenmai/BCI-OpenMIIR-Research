@@ -171,8 +171,8 @@ There are total 10 subjects in this dataset, so I analyze the data quality of ea
 |  | Statistic | Exclude P05 | 0.395 | x | 0.079 |
 | KNN | Statistic | Include P05 | 0.354 | 0.069 | 0.067 |
 |  | Statistic | Exclude P05 | 0.313 | 0.068 | 0.079 |
-| CNN | Time + Frequency | Include P05 | 0.5 | x | 0.5 |
-|  | Time + Frequency | Exclude P05 | 0.5 | x | 0.5 |
+| CNN | Time + Frequency | Include P05 | 0.087 | x | 0.087 |
+|  | Time + Frequency | Exclude P05 | 0.087 | x | 0.087 |
 
 ### Table 4 - Song identification (12 category, perception)
 
